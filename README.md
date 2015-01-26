@@ -1,4 +1,4 @@
-# fluent-plugin-string-scrub 
+# fluent-plugin-string-scrub [![Build Status](https://travis-ci.org/kataring/fluent-plugin-string-scrub.svg)](https://travis-ci.org/kataring/fluent-plugin-string-scrub) 
 
 TODO: Write a gem description
 
