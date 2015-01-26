@@ -64,7 +64,6 @@ class Fluent::StringScrubOutput < Fluent::Output
       return string
     rescue ArgumentError => e
       raise e unless e.message.index("invalid byte sequence in") == 0
-      #log.warn "string_scrub: invalid byte sequence is replaced in #{string}"
       string.scrub!('')
       retry
     end
