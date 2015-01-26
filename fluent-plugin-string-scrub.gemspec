@@ -18,5 +18,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "rake"
   spec.add_development_dependency "fluentd"
+  spec.add_development_dependency "test-unit"
   spec.add_runtime_dependency "string-scrub", "~> 0.0.3" if RUBY_VERSION.to_f < 2.1
 end
