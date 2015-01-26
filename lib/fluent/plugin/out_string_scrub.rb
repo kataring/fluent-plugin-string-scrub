@@ -4,6 +4,7 @@ class Fluent::StringScrubOutput < Fluent::Output
   config_param :tag, :string, :default => nil
   config_param :remove_prefix, :string, :default => nil
   config_param :add_prefix, :string, :default => nil
+  config_param :replace_char, :string, :default => ''
 
   def initialize
     super
@@ -25,6 +26,10 @@ class Fluent::StringScrubOutput < Fluent::Output
     end
     if @add_prefix
       @added_prefix_string = @add_prefix + '.'
+    end
+
+    if @replace_char and @replace_char.length >= 2
+        raise Fluent::ConfigError, "replace_char: mast be 1 character"
     end
   end
 
@@ -64,7 +69,7 @@ class Fluent::StringScrubOutput < Fluent::Output
       return string
     rescue ArgumentError => e
       raise e unless e.message.index("invalid byte sequence in") == 0
-      string.scrub!('')
+      string.scrub!(@replace_char)
       retry
     end
   end
