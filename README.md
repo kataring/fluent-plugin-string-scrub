@@ -1,7 +1,5 @@
 # fluent-plugin-string-scrub [![Build Status](https://travis-ci.org/kataring/fluent-plugin-string-scrub.svg)](https://travis-ci.org/kataring/fluent-plugin-string-scrub) 
 
-TODO: Write a gem description
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -17,6 +15,14 @@ And then execute:
 Or install it yourself as:
 
     $ gem install fluent-plugin-string-scrub
+
+## Configuration
+
+```
+<match raw.*>
+  type string_scrub
+</match>
+```
 
 ## Usage
 
