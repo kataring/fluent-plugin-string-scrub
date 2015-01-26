@@ -19,14 +19,29 @@ Or install it yourself as:
 ## Configuration
 
 ```
-<match raw.*>
+<match **>
   type string_scrub
+  tag scrubbed.string
 </match>
 ```
 
 ## Usage
 
-TODO: Write usage instructions here
+```
+<source>
+  type forward
+</source>
+
+<match raw.**>
+  type string_scrub
+  remove_prefix raw
+  add_prefix scrubbed
+</match>
+
+<match scrubbed.**>
+  type stdout
+</match>
+```
 
 ## Contributing
 
