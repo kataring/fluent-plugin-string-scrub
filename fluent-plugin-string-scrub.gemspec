@@ -3,13 +3,13 @@ lib = File.expand_path('../lib', __FILE__)
 
 Gem::Specification.new do |spec|
   spec.name          = "fluent-plugin-string-scrub"
-  spec.version       = "0.0.1" 
+  spec.version       = "0.0.2"
   spec.authors       = ["Noriaki Katayama"]
   spec.email         = ["kataring@gmail.com"]
   spec.summary       = %q{Fluentd Output filter plugin.}
-  spec.description   = %q{Fluentd Output filter plugin.}
+  spec.description   = %q{fluent plugin for string scrub.}
   spec.homepage      = "https://github.com/kataring/fluent-plugin-string-scrub"
-  spec.license       = "Apache 2.0"
+  spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
