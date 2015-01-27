@@ -1,5 +1,12 @@
 # fluent-plugin-string-scrub [![Build Status](https://travis-ci.org/kataring/fluent-plugin-string-scrub.svg)](https://travis-ci.org/kataring/fluent-plugin-string-scrub) 
 
+fluent plugin for string scrub.
+
+## [String#scrub](https://github.com/hsbt/string-scrub)
+
+>If the given string contains an invalid byte sequence then that invalid byte sequence is replaced with the [unicode replacement character](http://www.fileformat.info/info/unicode/char/0fffd/index.htm) (�) and a new string is returned.
+
+
 ## Installation
 
 Add this line to your application's Gemfile:
