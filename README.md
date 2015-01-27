@@ -22,6 +22,7 @@ Or install it yourself as:
 <match **>
   type string_scrub
   tag scrubbed.string
+  replace_char ?
 </match>
 ```
 
