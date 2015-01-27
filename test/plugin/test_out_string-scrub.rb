@@ -119,4 +119,19 @@ class StringScrubOutputTest < Test::Unit::TestCase
     assert_equal "scrubbed.log2", e2[0]
     assert_equal orig_message + '?', e2[2]['message']
   end
+
+  def test_emit3_struct_message
+    orig_message = 'testtesttest'
+    invalid_utf8 = "\xff".force_encoding('UTF-8')
+    d1 = create_driver(CONFIG_REPLACE_CHAR, 'input.log')
+    d1.run do
+      d1.emit({'message' => {'message_child' => orig_message + invalid_utf8}})
+    end
+    emits = d1.emits
+    assert_equal 1, emits.length
+
+    e1 = emits[0]
+    assert_equal "scrubbed.log", e1[0]
+    assert_equal orig_message + '?', e1[2]['message']['message_child']
+  end
 end
