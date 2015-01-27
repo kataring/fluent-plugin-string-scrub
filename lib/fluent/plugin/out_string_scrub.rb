@@ -52,15 +52,24 @@ class Fluent::StringScrubOutput < Fluent::Output
           end
 
     es.each do |time,record|
-      scrubbed = {}
-      record.each do |k,v|
-        scrubbed[with_scrub(k)] = with_scrub(v)
-      end
+      scrubbed = recv_record(record)
       next if scrubbed.nil?
       Fluent::Engine.emit(tag, time, scrubbed)
     end
 
     chain.next
+  end
+
+  def recv_record(record)
+    scrubbed = {}
+    record.each do |k,v|
+      if v.instance_of? Hash
+        scrubbed[with_scrub(k)] = recv_record(v)
+      else
+        scrubbed[with_scrub(k)] = with_scrub(v)
+      end
+    end
+    scrubbed
   end
 
   def with_scrub(string)
