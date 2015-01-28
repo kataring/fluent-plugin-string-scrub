@@ -27,9 +27,8 @@ class Fluent::StringScrubOutput < Fluent::Output
     if @add_prefix
       @added_prefix_string = @add_prefix + '.'
     end
-
-    if @replace_char and @replace_char.length >= 2
-        raise Fluent::ConfigError, "replace_char: mast be 1 character"
+    if @replace_char =~ /\\u\{*[A-F0-9]{4}\}*/
+      @replace_char = eval("\"#{@replace_char}\"")
     end
   end
 

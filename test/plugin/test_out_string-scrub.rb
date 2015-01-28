@@ -16,6 +16,18 @@ class StringScrubOutputTest < Test::Unit::TestCase
     replace_char ?
   ]
 
+  CONFIG_UNICODE_1 = %[
+    remove_prefix input
+    add_prefix scrubbed
+    replace_char \uFFFD
+  ]
+
+  CONFIG_UNICODE_2 = %[
+    remove_prefix input
+    add_prefix scrubbed
+    replace_char \u{FFFD}
+  ]
+
   def create_driver(conf=CONFIG,tag='test')
     Fluent::Test::OutputTestDriver.new(Fluent::StringScrubOutput, tag).configure(conf)
   end
@@ -133,5 +145,33 @@ class StringScrubOutputTest < Test::Unit::TestCase
     e1 = emits[0]
     assert_equal "scrubbed.log", e1[0]
     assert_equal orig_message + '?', e1[2]['message']['message_child']
+  end
+
+  def test_emit4_unicode1
+    orig_message = 'testtesttest'
+    invalid_utf8 = "\xff".force_encoding('UTF-8')
+    d1 = create_driver(CONFIG_UNICODE_1, 'input.log')
+    d1.run do
+      d1.emit({'message' => {'message_child' => orig_message + invalid_utf8}})
+    end
+    emits = d1.emits
+    assert_equal 1, emits.length
+
+    e1 = emits[0]
+    assert_equal "scrubbed.log", e1[0]
+    assert_equal orig_message + "\uFFFD".force_encoding('UTF-8'), e1[2]['message']['message_child']
+
+    orig_message = 'testtesttest'
+    invalid_utf8 = "\xff".force_encoding('UTF-8')
+    d1 = create_driver(CONFIG_UNICODE_2, 'input.log')
+    d1.run do
+      d1.emit({'message' => {'message_child' => orig_message + invalid_utf8}})
+    end
+    emits = d1.emits
+    assert_equal 1, emits.length
+
+    e1 = emits[0]
+    assert_equal "scrubbed.log", e1[0]
+    assert_equal orig_message + "\uFFFD".force_encoding('UTF-8'), e1[2]['message']['message_child']
   end
 end
