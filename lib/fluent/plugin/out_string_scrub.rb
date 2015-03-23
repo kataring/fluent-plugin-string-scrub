@@ -77,7 +77,7 @@ class Fluent::StringScrubOutput < Fluent::Output
       return string
     rescue ArgumentError => e
       raise e unless e.message.index("invalid byte sequence in") == 0
-      string.scrub!(@replace_char)
+      string = string.dup.scrub!(@replace_char)
       retry
     end
   end
