@@ -28,8 +28,8 @@ class StringScrubOutputTest < Test::Unit::TestCase
     replace_char \u{FFFD}
   ]
 
-  def create_driver(conf=CONFIG,tag='test')
-    Fluent::Test::OutputTestDriver.new(Fluent::StringScrubOutput, tag).configure(conf)
+  def create_driver(conf = CONFIG, tag = 'test', use_v1_config = true)
+    Fluent::Test::OutputTestDriver.new(Fluent::StringScrubOutput, tag).configure(conf, use_v1_config)
   end
 
   def test_configure
@@ -76,6 +76,26 @@ class StringScrubOutputTest < Test::Unit::TestCase
         add_prefix added
       ]
     }
+  end
+
+  def test_emit_fluentd_0_12
+    if Fluent::VERSION >= "0.12"
+      in_tag = 'input.log'
+      orig_message = 'testtesttest'
+      Fluent::Engine.root_agent.add_label('@foo')
+      d = create_driver(%[
+                        @label @foo
+                        ], in_tag)
+      label = Fluent::Engine.root_agent.find_label('@foo')
+      assert_equal(label.event_router, d.instance.router)
+
+      d.run do
+        d.emit({'message' => orig_message})
+      end
+      emits = d.emits
+      tag, time, record = emits.first
+      assert_equal(in_tag, tag)
+    end
   end
 
   def test_emit1_invalid_string
