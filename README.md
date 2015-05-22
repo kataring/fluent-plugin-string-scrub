@@ -51,6 +51,26 @@ Or install it yourself as:
 </match>
 ```
 
+## Filter plugin
+
+Fluentd >= v0.12 can use filter plugin.
+
+```
+<source>
+  type forward
+</source>
+
+<filter **>
+  type string_scrub
+  replace_char ?
+</filter>
+
+<match **>
+  type stdout
+</match>
+```
+
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/fluent-plugin-string-scrub/fork )
