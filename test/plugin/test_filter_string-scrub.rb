@@ -1,9 +1,14 @@
 require 'helper'
+require 'fluent/plugin/filter_string_scrub'
 
 class StringScrubFilterTest < Test::Unit::TestCase
   def setup
     Fluent::Test.setup
   end
+
+  CONFIG_1 = %[
+    replace_char ?
+  ]
 
   CONFIG_UNICODE_1 = %[
     replace_char \uFFFD
@@ -20,9 +25,7 @@ class StringScrubFilterTest < Test::Unit::TestCase
   def test_emit1_invalid_string
     return unless defined? Fluent::Filter
 
-    d = create_driver(%[
-      replace_char ?
-    ])
+    d = create_driver(CONFIG_1)
     orig_message = 'testtesttest'
     invalid_utf8 = "\xff".force_encoding('UTF-8')
     replace_char = '?'
