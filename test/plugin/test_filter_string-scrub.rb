@@ -25,6 +25,7 @@ class StringScrubFilterTest < Test::Unit::TestCase
 
   def test_filter1
     return unless defined? Fluent::Filter
+    return if RUBY_VERSION.to_f < 2.1
 
     orig_message = 'testtesttest'
     invalid_utf8 = "\xff".force_encoding('UTF-8')
