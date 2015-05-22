@@ -57,4 +57,4 @@ class Fluent::StringScrubFilter < Fluent::Filter
       retry
     end
   end
-end
+end if defined?(Fluent::Filter) # Support only >= v0.12
