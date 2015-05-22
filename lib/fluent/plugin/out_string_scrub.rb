@@ -6,6 +6,11 @@ class Fluent::StringScrubOutput < Fluent::Output
   config_param :add_prefix, :string, :default => nil
   config_param :replace_char, :string, :default => ''
 
+  # Define `router` method of v0.12 to support v0.10 or earlier
+  unless method_defined?(:router)
+    define_method("router") { Fluent::Engine }
+  end
+
   def initialize
     super
     require 'string/scrub' if RUBY_VERSION.to_f < 2.1
@@ -14,19 +19,22 @@ class Fluent::StringScrubOutput < Fluent::Output
   def configure(conf)
     super
 
-    if not @tag and not @remove_prefix and not @add_prefix
-      raise Fluent::ConfigError, "missing both of remove_prefix and add_prefix"
+    if conf['@label'].nil?
+      if not @tag and not @remove_prefix and not @add_prefix
+         raise Fluent::ConfigError, "missing both of remove_prefix and add_prefix"
+      end
+      if @tag and (@remove_prefix or @add_prefix)
+          raise Fluent::ConfigError, "both of tag and remove_prefix/add_prefix must not be specified"
+      end
+      if @remove_prefix
+          @removed_prefix_string = @remove_prefix + '.'
+          @removed_length = @removed_prefix_string.length
+      end
+      if @add_prefix
+        @added_prefix_string = @add_prefix + '.'
+      end
     end
-    if @tag and (@remove_prefix or @add_prefix)
-      raise Fluent::ConfigError, "both of tag and remove_prefix/add_prefix must not be specified"
-    end
-    if @remove_prefix
-      @removed_prefix_string = @remove_prefix + '.'
-      @removed_length = @removed_prefix_string.length
-    end
-    if @add_prefix
-      @added_prefix_string = @add_prefix + '.'
-    end
+
     if @replace_char =~ /\\u\{*[A-F0-9]{4}\}*/
       @replace_char = eval("\"#{@replace_char}\"")
     end
@@ -53,7 +61,7 @@ class Fluent::StringScrubOutput < Fluent::Output
     es.each do |time,record|
       scrubbed = recv_record(record)
       next if scrubbed.nil?
-      Fluent::Engine.emit(tag, time, scrubbed)
+      router.emit(tag, time, scrubbed)
     end
 
     chain.next
