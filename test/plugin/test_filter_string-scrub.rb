@@ -1,6 +1,8 @@
 require 'helper'
 
 class StringScrubFilterTest < Test::Unit::TestCase
+  include Fluent
+
   def setup
     Fluent::Test.setup
   end
@@ -24,14 +26,14 @@ class StringScrubFilterTest < Test::Unit::TestCase
   def test_filter1
     return unless defined? Fluent::Filter
 
-    d = create_driver(CONFIG)
     orig_message = 'testtesttest'
     invalid_utf8 = "\xff".force_encoding('UTF-8')
-    time = Time.parse("2015-05-22 11:22:33 UTC").to_i
 
     es = Fluent::MultiEventStream.new
+    time = Time.parse("2015-05-22 11:22:33 UTC").to_i
     es.add(time, {"message" => orig_message + invalid_utf8})
 
+    d = create_driver(CONFIG)
     filtered_es = d.filter_stream('test.filter', es)
     records = filtered_es.instance_variable_get(:@record_array)
     assert_equal 1, records.length
