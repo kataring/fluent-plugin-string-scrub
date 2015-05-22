@@ -6,7 +6,7 @@ class StringScrubFilterTest < Test::Unit::TestCase
     Fluent::Test.setup
   end
 
-  CONFIG_1 = %[
+  CONFIG = %[
     replace_char ?
   ]
 
@@ -22,10 +22,10 @@ class StringScrubFilterTest < Test::Unit::TestCase
     Fluent::Test::FilterTestDriver.new(Fluent::StringScrubFilter).configure(conf, tag)
   end
 
-  def test_emit1_invalid_string
+  def test_filter1
     return unless defined? Fluent::Filter
 
-    d = create_driver(CONFIG_1)
+    d = create_driver(CONFIG)
     orig_message = 'testtesttest'
     invalid_utf8 = "\xff".force_encoding('UTF-8')
     replace_char = '?'
