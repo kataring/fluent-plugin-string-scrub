@@ -51,7 +51,9 @@ Or install it yourself as:
 </match>
 ```
 
-### filter
+## Filter plugin
+
+Fluentd >= v0.12 can use filter plugin.
 
 ```
 <source>
