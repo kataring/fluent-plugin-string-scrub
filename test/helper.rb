@@ -23,6 +23,7 @@ unless ENV.has_key?('VERBOSE')
 end
 
 require 'fluent/plugin/out_string_scrub'
+require 'fluent/plugin/filter_string_scrub'
 
 class Test::Unit::TestCase
 end
