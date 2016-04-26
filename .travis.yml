@@ -1,4 +1,6 @@
 language: ruby
+script: bundle exec rake
+sudo: false
 rvm:
   - 1.9.3
   - 2.0.0-p647
