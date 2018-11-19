@@ -15,9 +15,9 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
+  spec.required_ruby_version = Gem::Requirement.new(">= 2.1".freeze)
 
   spec.add_development_dependency "rake"
   spec.add_development_dependency "test-unit"
-  spec.add_development_dependency "fluentd"
-  spec.add_runtime_dependency "string-scrub", "~> 0.0.5" if RUBY_VERSION.to_f < 2.1
+  spec.add_development_dependency "fluentd", [">= 0.14.0", "< 2"]
 end

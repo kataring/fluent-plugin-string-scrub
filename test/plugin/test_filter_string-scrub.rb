@@ -20,24 +20,22 @@ class StringScrubFilterTest < Test::Unit::TestCase
     replace_char \u{FFFD}
   ]
 
-  def create_driver(conf=CONFIG, tag='test.filter')
-    Fluent::Test::FilterTestDriver.new(Fluent::StringScrubFilter).configure(conf, tag)
+  def create_driver(conf=CONFIG)
+    Fluent::Test::Driver::Filter.new(Fluent::Plugin::StringScrubFilter).configure(conf)
   end
 
   def filter(config, msgs)
     d = create_driver(config)
-    d.run {
+    d.run(default_tag: 'test.filter') {
       msgs.each {|msg|
-        d.filter(msg, @time)
+        d.feed(@time, msg)
       }
     }
-    filtered = d.filtered_as_array
-    filtered.map {|m| m[2] }
+    filtered = d.filtered
+    filtered.map {|m| m[1] }
   end
 
   def test_filter1
-    return unless defined? Fluent::Filter
-
     orig_message = 'testtesttest'
     invalid_utf8 = "\xff".force_encoding('UTF-8')
     msg = {"message" => orig_message + invalid_utf8}
