@@ -1,11 +1,12 @@
-class Fluent::StringScrubFilter < Fluent::Filter
+require 'fluent/plugin/filter'
+
+class Fluent::Plugin::StringScrubFilter < Fluent::Plugin::Filter
   Fluent::Plugin.register_filter('string_scrub', self)
 
   config_param :replace_char, :string, :default => ''
 
   def initialize
     super
-    require 'string/scrub' if RUBY_VERSION.to_f < 2.1
   end
 
   def configure(conf)
@@ -57,4 +58,4 @@ class Fluent::StringScrubFilter < Fluent::Filter
       retry
     end
   end
-end if defined?(Fluent::Filter) # Support only >= v0.12
+end

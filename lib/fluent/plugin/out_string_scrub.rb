@@ -1,19 +1,17 @@
-class Fluent::StringScrubOutput < Fluent::Output
+require 'fluent/plugin/output'
+
+class Fluent::Plugin::StringScrubOutput < Fluent::Plugin::Output
   Fluent::Plugin.register_output('string_scrub', self)
+
+  helpers :event_emitter
 
   config_param :tag, :string, :default => nil
   config_param :remove_prefix, :string, :default => nil
   config_param :add_prefix, :string, :default => nil
   config_param :replace_char, :string, :default => ''
 
-  # Define `router` method of v0.12 to support v0.10 or earlier
-  unless method_defined?(:router)
-    define_method("router") { Fluent::Engine }
-  end
-
   def initialize
     super
-    require 'string/scrub' if RUBY_VERSION.to_f < 2.1
   end
 
   def configure(conf)
@@ -40,7 +38,7 @@ class Fluent::StringScrubOutput < Fluent::Output
     end
   end
 
-  def emit(tag, es, chain)
+  def process(tag, es)
     tag = if @tag
             @tag
           else
@@ -63,8 +61,6 @@ class Fluent::StringScrubOutput < Fluent::Output
       next if scrubbed.nil?
       router.emit(tag, time, scrubbed)
     end
-
-    chain.next
   end
 
   def recv_record(record)
