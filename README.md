@@ -27,7 +27,7 @@ Or install it yourself as:
 
 ```
 <match **>
-  type string_scrub
+  @type string_scrub
   tag scrubbed.string
   replace_char ?
 </match>
@@ -37,17 +37,17 @@ Or install it yourself as:
 
 ```
 <source>
-  type forward
+  @type forward
 </source>
 
 <match raw.**>
-  type string_scrub
+  @type string_scrub
   remove_prefix raw
   add_prefix scrubbed
 </match>
 
 <match scrubbed.**>
-  type stdout
+  @type stdout
 </match>
 ```
 
@@ -57,16 +57,16 @@ Fluentd >= v0.12 can use filter plugin.
 
 ```
 <source>
-  type forward
+  @type forward
 </source>
 
 <filter **>
-  type string_scrub
+  @type string_scrub
   replace_char ?
 </filter>
 
 <match **>
-  type stdout
+  @type stdout
 </match>
 ```
 
