@@ -23,7 +23,7 @@ class Fluent::Plugin::StringScrubFilter < Fluent::Plugin::Filter
       begin
         scrubbed = recv_record(record)
         next if scrubbed.nil?
-        new_es.add(time, record)
+        new_es.add(time, scrubbed)
       rescue => e
         router.emit_error_event(tag, time, record, e)
       end
