@@ -68,6 +68,8 @@ class Fluent::Plugin::StringScrubOutput < Fluent::Plugin::Output
     record.each do |k,v|
       if v.instance_of? Hash
         scrubbed[with_scrub(k)] = recv_record(v)
+      elsif v.instance_of? Integer
+        scrubbed[k] = v
       else
         scrubbed[with_scrub(k)] = with_scrub(v)
       end
