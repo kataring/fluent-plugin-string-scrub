@@ -43,4 +43,11 @@ class StringScrubFilterTest < Test::Unit::TestCase
     assert_equal([{"message" => orig_message + '?'}], filtered)
   end
 
+  def test_filter2_frozen_string
+    orig_message = 'testtesttest'
+    invalid_utf8 = "\xff".force_encoding('UTF-8')
+    msg = {"message" => (orig_message + invalid_utf8).freeze}
+    filtered = filter(CONFIG, [msg])
+    assert_equal([{"message" => orig_message + '?'}], filtered)
+  end
 end
