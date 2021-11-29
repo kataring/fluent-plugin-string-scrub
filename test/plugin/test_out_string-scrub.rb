@@ -201,4 +201,18 @@ class StringScrubOutputTest < Test::Unit::TestCase
     assert_equal "scrubbed.log2", e2[0]
     assert_equal orig_message, e2[2]['message']
   end
+
+  def test_emit6_integer
+    orig_message = 123456789
+    d1 = create_driver(CONFIG)
+    d1.run(default_tag: 'input.log') do
+      d1.feed({'message' => orig_message})
+    end
+    emits = d1.events
+    assert_equal 1, emits.length
+
+    e1 = emits[0]
+    assert_equal "scrubbed.log", e1[0]
+    assert_equal orig_message, e1[2]['message']
+  end
 end
