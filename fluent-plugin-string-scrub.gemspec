@@ -3,7 +3,7 @@ lib = File.expand_path('../lib', __FILE__)
 
 Gem::Specification.new do |spec|
   spec.name          = "fluent-plugin-string-scrub"
-  spec.version       = "1.0.0"
+  spec.version       = "1.0.1"
   spec.authors       = ["Noriaki Katayama"]
   spec.email         = ["kataring@gmail.com"]
   spec.summary       = %q{Fluentd Output filter plugin.}
