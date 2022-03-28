@@ -1,4 +1,4 @@
-# fluent-plugin-string-scrub [![Gem Version](https://badge.fury.io/rb/fluent-plugin-string-scrub.svg)](http://badge.fury.io/rb/fluent-plugin-string-scrub) [![Build Status](https://travis-ci.org/kataring/fluent-plugin-string-scrub.svg)](https://travis-ci.org/kataring/fluent-plugin-string-scrub) 
+# fluent-plugin-string-scrub [![Gem Version](https://badge.fury.io/rb/fluent-plugin-string-scrub.svg)](http://badge.fury.io/rb/fluent-plugin-string-scrub)
 
 fluent plugin for string scrub.
 
