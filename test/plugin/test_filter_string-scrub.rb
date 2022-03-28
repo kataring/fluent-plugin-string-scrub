@@ -50,10 +50,11 @@ class StringScrubFilterTest < Test::Unit::TestCase
     filtered = filter(CONFIG, [msg])
     assert_equal([{"message" => orig_message + '?'}], filtered)
 
-  def test_filter_integer
-    orig_message = 123456789
-    msg = {"message" => orig_message}
-    filtered = filter(CONFIG, [msg])
-    assert_equal([{"message" => orig_message}], filtered)
+    def test_filter_integer
+      orig_message = 123456789
+      msg = {"message" => orig_message}
+      filtered = filter(CONFIG, [msg])
+      assert_equal([{"message" => orig_message}], filtered)
+    end
   end
 end
