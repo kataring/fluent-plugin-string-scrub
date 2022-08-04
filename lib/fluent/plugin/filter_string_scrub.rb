@@ -17,24 +17,13 @@ class Fluent::Plugin::StringScrubFilter < Fluent::Plugin::Filter
     end
   end
 
-  def filter_stream(tag, es)
-    new_es = Fluent::MultiEventStream.new
-    es.each do |time,record|
-      begin
-        scrubbed = recv_record(record)
-        next if scrubbed.nil?
-        new_es.add(time, scrubbed)
-      rescue => e
-        router.emit_error_event(tag, time, record, e)
-      end
-    end
-
-    new_es
+  def filter(_tag, _time, record)
+    recv_record(record)
   end
 
   def recv_record(record)
     scrubbed = {}
-    record.each do |k,v|
+    record.each do |k, v|
       if v.instance_of? Hash
         scrubbed[with_scrub(k)] = recv_record(v)
       elsif v.instance_of? Integer
