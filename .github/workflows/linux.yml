@@ -3,24 +3,34 @@ on:
   - push
   - pull_request
 jobs:
+  ruby-versions:
+    runs-on: ubuntu-latest
+    outputs:
+      versions: ${{ steps.versions.outputs.versions }}
+    steps:
+      - id: versions
+        uses: ybiquitous/dynamic-ruby-versions-action@v1
+
   build:
+    needs: ruby-versions
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ '2.3', '2.4', '2.5', '2.6', '2.7', '3.0' ]
+        ruby: ${{ fromJson(needs.ruby-versions.outputs.versions) }}
         os:
           - ubuntu-latest
-    name: Ruby ${{ matrix.ruby }} unit testing on ${{ matrix.os }}
+    name: build (${{ matrix.ruby }} / ${{ matrix.os }})
     steps:
-    - uses: actions/checkout@v2
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-    - name: unit testing
-      env:
-        CI: true
-      run: |
-        gem install bundler rake
-        bundle install --jobs 4 --retry 3
-        bundle exec rake test
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: unit testing
+        env:
+          CI: true
+        run: |
+          gem install bundler rake
+          bundle install --jobs 4 --retry 3
+          bundle exec rake test
