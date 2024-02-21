@@ -26,10 +26,10 @@ class Fluent::Plugin::StringScrubFilter < Fluent::Plugin::Filter
     record.each do |k, v|
       if v.instance_of? Hash
         scrubbed[with_scrub(k)] = recv_record(v)
-      elsif v.instance_of? Integer
-        scrubbed[k] = v
-      else
+      elsif v.instance_of? String
         scrubbed[with_scrub(k)] = with_scrub(v)
+      else
+        scrubbed[with_scrub(k)] = v
       end
     end
     scrubbed
